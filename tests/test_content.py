@@ -587,3 +587,30 @@ def test_blank_method(
     assert blank.plain == text
     assert blank.spans == spans
     assert blank.cell_length == cell_length
+
+
+@pytest.mark.parametrize(
+    "text,width,expected_plain,expected_cells",
+    [
+        ("ab", 10, "    ab    ", 10),
+        ("hello", 11, "   hello   ", 11),
+        ("hello", 10, "  hello   ", 10),
+        ("hello", 5, "hello", 5),
+        ("hello world", 5, "hello", 5),
+        ("", 6, "      ", 6),
+    ],
+)
+def test_center(
+    text: str, width: int, expected_plain: str, expected_cells: int
+) -> None:
+    content = Content(text).center(width)
+    assert content.plain == expected_plain
+    assert content.cell_length == expected_cells
+
+
+def test_center_with_spans() -> None:
+    content = Content.styled("bold", "bold").center(10)
+    assert content.plain == "   bold   "
+    assert content.cell_length == 10
+    assert content.spans == [Span(3, 7, "bold")]
+

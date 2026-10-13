@@ -1219,8 +1219,9 @@ class Content(Visual):
             New line Content.
         """
         content = self.rstrip().truncate(width, ellipsis=ellipsis)
-        left = (width - content.cell_length) // 2
-        right = width - left
+        excess = width - content.cell_length
+        left = excess // 2
+        right = excess - left
         content = content.pad(left, right)
         return content
 
